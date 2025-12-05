@@ -1,26 +1,14 @@
 {
   "name": "evid-dgc",
-  "version": "1.0.0",
-  "description": "Evid-DGC - Blockchain-Based Evidence Management System with IPFS Storage",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "Modern blockchain evidence management system with 3D UI",
+  "main": "public/index.html",
   "scripts": {
-    "compile": "truffle compile",
-    "migrate": "truffle migrate",
-    "migrate:mumbai": "truffle migrate --network mumbai",
-    "test": "truffle test",
-    "dev": "cd public && http-server -p 3000",
-    "deploy": "vercel"
+    "start": "http-server public -p 8080 -o",
+    "dev": "http-server public -p 8080"
   },
-  "keywords": [
-    "blockchain",
-    "evidence",
-    "legal",
-    "ethereum",
-    "ipfs",
-    "smart-contracts",
-    "web3"
-  ],
-  "author": "Evidence Management Team",
+  "keywords": ["blockchain", "evidence", "3d-ui", "modern"],
+  "author": "EVID-DGC Team",
   "license": "MIT",
   "dependencies": {
     "truffle": "^5.8.0",
@@ -28,15 +16,6 @@
     "@truffle/hdwallet-provider": "^2.1.0"
   },
   "devDependencies": {
-    "http-server": "^14.1.1",
-    "vercel": "^28.16.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-username/evidence-management-system.git"
-  },
-  "bugs": {
-    "url": "https://github.com/your-username/evidence-management-system/issues"
-  },
-  "homepage": "https://github.com/your-username/evidence-management-system#readme"
+    "http-server": "^14.1.1"
+  }
 }

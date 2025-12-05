@@ -3,28 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Public Viewer Dashboard - Evidence Management System</title>
+    <title>👁️ Public Viewer Dashboard - Evid-DGC</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👁️</text></svg>">
 </head>
 <body>
+    <!-- Floating Particles Background -->
+    <div class="particles" id="particles"></div>
     <!-- Navigation -->
-    <nav class="nav">
+    <nav class="dashboard-nav">
         <div class="container">
             <div class="nav-content">
-                <a href="index.html" class="nav-brand">🔗 Evidence System</a>
-                <div class="flex items-center gap-4">
-                    <span class="badge badge-public">Public Viewer</span>
-                    <span id="userWallet" class="text-sm text-muted"></span>
+                <a href="index.html" class="nav-brand">🔐 EVID-DGC</a>
+                <div class="nav-items">
+                    <span class="badge badge-public">👁️ Public Viewer</span>
+                    <span id="userWallet" class="wallet-display"></span>
+                    <button class="btn btn-outline btn-sm" onclick="window.location.href='index.html'">🚪 Exit</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <div class="hero">
+    <div class="dashboard-hero">
         <div class="container">
-            <h1>Public Evidence Portal</h1>
-            <p>Access publicly released legal cases and evidence with full transparency</p>
+            <h1>👁️ Public Evidence Portal</h1>
+            <p>🌟 Access publicly released legal cases and evidence with full transparency 🌟</p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="stat-icon">📊</span>
+                    <span class="stat-text">Real-time Data</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="stat-icon">🔒</span>
+                    <span class="stat-text">Blockchain Verified</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="stat-icon">🌐</span>
+                    <span class="stat-text">IPFS Storage</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -205,5 +223,61 @@
     <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
     <script src="config.js"></script>
     <script src="dashboard-public-viewer.js"></script>
+    <script>
+        // Create floating particles for dashboard
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particles.appendChild(particle);
+            }
+        }
+        
+        // Tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.dataset.tab;
+                    
+                    // Remove active class from all buttons and contents
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+            
+            // Modal functionality
+            const modals = document.querySelectorAll('.modal');
+            const closeButtons = document.querySelectorAll('.modal-close');
+            
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const modal = this.closest('.modal');
+                    modal.classList.remove('active');
+                });
+            });
+            
+            // Close modal when clicking outside
+            modals.forEach(modal => {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        this.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

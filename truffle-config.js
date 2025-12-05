@@ -9,17 +9,29 @@ module.exports = {
       gas: 6721975,
       gasPrice: 20000000000
     },
-    mumbai: {
+    goerli: {
       provider: () => new HDWalletProvider(
         process.env.MNEMONIC || "your twelve word mnemonic phrase here",
-        `https://rpc-mumbai.maticvigil.com/`
+        `https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161`
       ),
-      network_id: 80001,
+      network_id: 5,
       confirmations: 2,
       timeoutBlocks: 200,
       skipDryRun: true,
       gas: 6000000,
-      gasPrice: 10000000000
+      gasPrice: 20000000000
+    },
+    sepolia: {
+      provider: () => new HDWalletProvider(
+        process.env.MNEMONIC || "your twelve word mnemonic phrase here",
+        `https://rpc.sepolia.org`
+      ),
+      network_id: 11155111,
+      confirmations: 2,
+      timeoutBlocks: 200,
+      skipDryRun: true,
+      gas: 6000000,
+      gasPrice: 20000000000
     }
   },
   compilers: {
