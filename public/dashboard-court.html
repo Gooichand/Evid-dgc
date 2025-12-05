@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Court Official Dashboard - Evidence Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">🔗 Evidence System</a>
+                <div class="flex items-center gap-4">
+                    <span class="badge badge-court">Court Official</span>
+                    <span id="userWallet" class="text-sm text-muted"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="mb-6">
+            <h1>Court Official Dashboard</h1>
+            <p class="text-muted">Manage access requests, release evidence to public, and oversee case proceedings</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-4 mb-8">
+            <div class="card stats-card" style="background: var(--court);">
+                <div class="stats-number" id="totalCasesCount">0</div>
+                <div class="stats-label">Total Cases</div>
+            </div>
+            <div class="card stats-card" style="background: var(--court);">
+                <div class="stats-number" id="pendingRequestsCount">0</div>
+                <div class="stats-label">Pending Requests</div>
+            </div>
+            <div class="card stats-card" style="background: var(--court);">
+                <div class="stats-number" id="releasedItemsCount">0</div>
+                <div class="stats-label">Released Items</div>
+            </div>
+            <div class="card stats-card" style="background: var(--court);">
+                <div class="stats-number" id="totalEvidenceCount">0</div>
+                <div class="stats-label">Total Evidence</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <ul class="tab-list">
+                <li><button class="tab-button active" data-tab="all-cases">All Cases</button></li>
+                <li><button class="tab-button" data-tab="access-requests">Access Requests</button></li>
+                <li><button class="tab-button" data-tab="release-public">Release to Public</button></li>
+                <li><button class="tab-button" data-tab="case-management">Case Management</button></li>
+                <li><button class="tab-button" data-tab="verify">Verify Evidence</button></li>
+            </ul>
+        </div>
+
+        <!-- All Cases Tab -->
+        <div id="all-cases" class="tab-content active">
+            <div class="flex justify-between items-center mb-6">
+                <h2>All Cases</h2>
+                <div class="flex gap-4">
+                    <select id="caseStatusFilter" class="form-select" style="width: 200px;">
+                        <option value="">All Statuses</option>
+                        <option value="0">Open</option>
+                        <option value="1">Under Review</option>
+                        <option value="2">Closed</option>
+                        <option value="3">Archived</option>
+                    </select>
+                    <select id="caseVisibilityFilter" class="form-select" style="width: 200px;">
+                        <option value="">All Visibility</option>
+                        <option value="0">Public</option>
+                        <option value="1">Restricted</option>
+                        <option value="2">Confidential</option>
+                        <option value="3">Public Released</option>
+                    </select>
+                    <button id="refreshAllCases" class="btn btn-outline">🔄 Refresh</button>
+                </div>
+            </div>
+            <div id="allCasesContainer">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading all cases...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Access Requests Tab -->
+        <div id="access-requests" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>Access Requests</h2>
+                <button id="refreshAccessRequests" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div id="accessRequestsContainer">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading access requests...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Release to Public Tab -->
+        <div id="release-public" class="tab-content">
+            <div class="grid grid-cols-2 gap-6">
+                <div class="card">
+                    <h3>Release Case to Public</h3>
+                    <form id="releaseCaseForm">
+                        <div class="form-group">
+                            <label class="form-label" for="releaseCaseNumber">Case Number *</label>
+                            <input type="text" id="releaseCaseNumber" class="form-input" required placeholder="Enter case number">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="caseReleaseReason">Release Reason *</label>
+                            <textarea id="caseReleaseReason" class="form-textarea" required placeholder="Reason for public release..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="releaseAllEvidence"> Also release all case evidence
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Release Case</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Release Evidence to Public</h3>
+                    <form id="releaseEvidenceForm">
+                        <div class="form-group">
+                            <label class="form-label" for="releaseEvidenceId">Evidence ID *</label>
+                            <input type="text" id="releaseEvidenceId" class="form-input" required placeholder="Enter evidence ID">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="evidenceReleaseReason">Release Reason *</label>
+                            <textarea id="evidenceReleaseReason" class="form-textarea" required placeholder="Reason for public release..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Release Evidence</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-6">
+                <h3>Recently Released Items</h3>
+                <div id="recentlyReleasedContainer">
+                    <div class="text-center p-4">
+                        <div class="loading mb-4"></div>
+                        <p>Loading recently released items...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Case Management Tab -->
+        <div id="case-management" class="tab-content">
+            <div class="grid grid-cols-2 gap-6">
+                <div class="card">
+                    <h3>Update Case Status</h3>
+                    <form id="updateCaseStatusForm">
+                        <div class="form-group">
+                            <label class="form-label" for="statusCaseNumber">Case Number *</label>
+                            <input type="text" id="statusCaseNumber" class="form-input" required placeholder="Enter case number">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="newCaseStatus">New Status *</label>
+                            <select id="newCaseStatus" class="form-select" required>
+                                <option value="">Select Status</option>
+                                <option value="0">Open</option>
+                                <option value="1">Under Review</option>
+                                <option value="2">Closed</option>
+                                <option value="3">Archived</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Status</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>Update Evidence Status</h3>
+                    <form id="updateEvidenceStatusForm">
+                        <div class="form-group">
+                            <label class="form-label" for="statusEvidenceId">Evidence ID *</label>
+                            <input type="text" id="statusEvidenceId" class="form-input" required placeholder="Enter evidence ID">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="newEvidenceStatus">New Status *</label>
+                            <select id="newEvidenceStatus" class="form-select" required>
+                                <option value="">Select Status</option>
+                                <option value="0">Submitted</option>
+                                <option value="1">Verified</option>
+                                <option value="2">Challenged</option>
+                                <option value="3">Accepted</option>
+                                <option value="4">Rejected</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update Status</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verify Evidence Tab -->
+        <div id="verify" class="tab-content">
+            <div class="card">
+                <h2>Verify Evidence</h2>
+                <div class="form-group">
+                    <label class="form-label" for="verifyEvidenceId">Evidence ID</label>
+                    <input type="text" id="verifyEvidenceId" class="form-input" placeholder="Enter Evidence ID to verify">
+                </div>
+                <button id="verifyEvidenceBtn" class="btn btn-primary">Verify Evidence</button>
+                <div id="verificationResult" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Details Modal -->
+    <div id="caseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalCaseTitle">Case Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalCaseContent"></div>
+            <div class="mt-4">
+                <h3>Court Actions</h3>
+                <div class="flex gap-4">
+                    <button id="quickReleaseCase" class="btn btn-success">Quick Release to Public</button>
+                    <button id="updateCaseStatusBtn" class="btn btn-warning">Update Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evidence Details Modal -->
+    <div id="evidenceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalEvidenceTitle">Evidence Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalEvidenceContent"></div>
+            <div class="mt-4">
+                <h3>Court Actions</h3>
+                <div class="flex gap-4">
+                    <button id="quickReleaseEvidence" class="btn btn-success">Quick Release to Public</button>
+                    <button id="updateEvidenceStatusBtn" class="btn btn-warning">Update Status</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Access Request Modal -->
+    <div id="accessRequestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalRequestTitle">Access Request Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalRequestContent"></div>
+            <div class="mt-4">
+                <div class="flex gap-4">
+                    <button id="approveRequest" class="btn btn-success">Approve Request</button>
+                    <button id="denyRequest" class="btn btn-error">Deny Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content text-center">
+            <div class="loading mb-4"></div>
+            <h3>Processing...</h3>
+            <p id="loadingMessage">Please wait while your transaction is being processed.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="config.js"></script>
+    <script src="dashboard-court.js"></script>
+</body>
+</html>

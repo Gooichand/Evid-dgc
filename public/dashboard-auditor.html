@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditor Dashboard - Evidence Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">🔗 Evidence System</a>
+                <div class="flex items-center gap-4">
+                    <span class="badge badge-auditor">Auditor</span>
+                    <span id="userWallet" class="text-sm text-muted"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="mb-6">
+            <h1>Auditor Dashboard</h1>
+            <p class="text-muted">Read-only access to all data, audit trails, and system monitoring</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-4 mb-8">
+            <div class="card stats-card" style="background: var(--auditor);">
+                <div class="stats-number" id="totalUsersCount">0</div>
+                <div class="stats-label">Total Users</div>
+            </div>
+            <div class="card stats-card" style="background: var(--auditor);">
+                <div class="stats-number" id="totalActionsCount">0</div>
+                <div class="stats-label">Total Actions</div>
+            </div>
+            <div class="card stats-card" style="background: var(--auditor);">
+                <div class="stats-number" id="accessViolationsCount">0</div>
+                <div class="stats-label">Access Violations</div>
+            </div>
+            <div class="card stats-card" style="background: var(--auditor);">
+                <div class="stats-number" id="systemHealthScore">100</div>
+                <div class="stats-label">System Health %</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <ul class="tab-list">
+                <li><button class="tab-button active" data-tab="audit-logs">Audit Logs</button></li>
+                <li><button class="tab-button" data-tab="access-reports">Access Reports</button></li>
+                <li><button class="tab-button" data-tab="user-activity">User Activity</button></li>
+                <li><button class="tab-button" data-tab="system-stats">System Stats</button></li>
+            </ul>
+        </div>
+
+        <!-- Audit Logs Tab -->
+        <div id="audit-logs" class="tab-content active">
+            <div class="flex justify-between items-center mb-6">
+                <h2>System Audit Logs</h2>
+                <div class="flex gap-4">
+                    <select id="logTypeFilter" class="form-select" style="width: 200px;">
+                        <option value="">All Activities</option>
+                        <option value="evidence_access">Evidence Access</option>
+                        <option value="evidence_upload">Evidence Upload</option>
+                        <option value="case_creation">Case Creation</option>
+                        <option value="public_release">Public Release</option>
+                        <option value="status_change">Status Changes</option>
+                        <option value="user_registration">User Registration</option>
+                    </select>
+                    <input type="date" id="logDateFilter" class="form-input" style="width: 200px;">
+                    <button id="filterLogsBtn" class="btn btn-outline">Filter</button>
+                    <button id="exportLogsBtn" class="btn btn-primary">📥 Export</button>
+                </div>
+            </div>
+            <div id="auditLogsContainer">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Target</th>
+                                <th>Details</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="auditLogsTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center p-8">
+                                    <div class="loading mb-4"></div>
+                                    <p>Loading audit logs...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Access Reports Tab -->
+        <div id="access-reports" class="tab-content">
+            <div class="grid grid-cols-2 gap-6 mb-6">
+                <div class="card">
+                    <h3>Evidence Access Summary</h3>
+                    <div id="evidenceAccessChart" class="text-center p-4">
+                        <p class="text-muted">Evidence access patterns and statistics</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>User Activity Summary</h3>
+                    <div id="userActivityChart" class="text-center p-4">
+                        <p class="text-muted">User activity patterns by role</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Access Violations & Suspicious Activity</h3>
+                <div id="violationsContainer">
+                    <div class="text-center p-8">
+                        <p>No access violations detected.</p>
+                        <p class="text-muted">System is operating within normal parameters.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Activity Tab -->
+        <div id="user-activity" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>User Activity Monitoring</h2>
+                <div class="flex gap-4">
+                    <select id="userRoleFilter" class="form-select" style="width: 200px;">
+                        <option value="">All Roles</option>
+                        <option value="1">Public Viewer</option>
+                        <option value="2">Investigator</option>
+                        <option value="3">Forensic Analyst</option>
+                        <option value="4">Legal Professional</option>
+                        <option value="5">Court Official</option>
+                        <option value="6">Evidence Manager</option>
+                        <option value="7">Auditor</option>
+                        <option value="8">Administrator</option>
+                    </select>
+                    <input type="text" id="userSearchFilter" class="form-input" placeholder="Search user..." style="width: 200px;">
+                    <button id="filterUsersBtn" class="btn btn-outline">Filter</button>
+                </div>
+            </div>
+            
+            <div id="userActivityContainer">
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Role</th>
+                                <th>Department</th>
+                                <th>Last Login</th>
+                                <th>Actions Today</th>
+                                <th>Total Actions</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userActivityTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center p-8">
+                                    <div class="loading mb-4"></div>
+                                    <p>Loading user activity...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Stats Tab -->
+        <div id="system-stats" class="tab-content">
+            <div class="grid grid-cols-3 gap-6 mb-6">
+                <div class="card text-center">
+                    <h3>System Performance</h3>
+                    <div class="stats-number text-success">99.9%</div>
+                    <div class="stats-label">Uptime</div>
+                </div>
+                <div class="card text-center">
+                    <h3>Data Integrity</h3>
+                    <div class="stats-number text-success">100%</div>
+                    <div class="stats-label">Hash Verification</div>
+                </div>
+                <div class="card text-center">
+                    <h3>Security Score</h3>
+                    <div class="stats-number text-success">A+</div>
+                    <div class="stats-label">Security Rating</div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-6">
+                <div class="card">
+                    <h3>Storage Statistics</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span>Total Evidence Files:</span>
+                            <span id="totalFilesCount">0</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Total Storage Used:</span>
+                            <span id="totalStorageUsed">0 GB</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>IPFS Nodes:</span>
+                            <span id="ipfsNodesCount">Active</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Blockchain Sync:</span>
+                            <span id="blockchainSync" class="text-success">Synced</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Compliance Status</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between">
+                            <span>Data Retention:</span>
+                            <span class="text-success">✅ Compliant</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Access Controls:</span>
+                            <span class="text-success">✅ Enforced</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Audit Trail:</span>
+                            <span class="text-success">✅ Complete</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Encryption:</span>
+                            <span class="text-success">✅ Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-6">
+                <h3>System Health Report</h3>
+                <div id="healthReportContainer">
+                    <div class="alert alert-success">
+                        <h4>✅ System Operating Normally</h4>
+                        <p>All components are functioning within expected parameters.</p>
+                        <ul class="list-disc pl-6 mt-2">
+                            <li>Blockchain connectivity: Stable</li>
+                            <li>IPFS storage: Available</li>
+                            <li>Smart contract: Responsive</li>
+                            <li>User authentication: Working</li>
+                            <li>Data integrity: Verified</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="config.js"></script>
+    <script>
+        // Simplified Auditor Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Basic initialization
+            if (typeof window.ethereum !== 'undefined') {
+                window.ethereum.request({ method: 'eth_accounts' }).then(accounts => {
+                    if (accounts.length > 0) {
+                        document.getElementById('userWallet').textContent = accounts[0].substring(0, 6) + '...' + accounts[0].substring(38);
+                    }
+                });
+            }
+            
+            // Tab switching
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+            
+            // Simulate loading audit logs
+            setTimeout(() => {
+                document.getElementById('auditLogsTableBody').innerHTML = `
+                    <tr>
+                        <td>${new Date().toLocaleString()}</td>
+                        <td>Investigator Smith</td>
+                        <td>Evidence Upload</td>
+                        <td>EVD-2024-001</td>
+                        <td>Digital evidence uploaded to IPFS</td>
+                        <td><span class="badge badge-success">Success</span></td>
+                    </tr>
+                    <tr>
+                        <td>${new Date(Date.now() - 3600000).toLocaleString()}</td>
+                        <td>Court Official Johnson</td>
+                        <td>Public Release</td>
+                        <td>CASE-2024-001</td>
+                        <td>Case released to public</td>
+                        <td><span class="badge badge-success">Success</span></td>
+                    </tr>
+                    <tr>
+                        <td>${new Date(Date.now() - 7200000).toLocaleString()}</td>
+                        <td>Legal Professional Davis</td>
+                        <td>Access Request</td>
+                        <td>EVD-2024-002</td>
+                        <td>Requested access to evidence</td>
+                        <td><span class="badge badge-warning">Pending</span></td>
+                    </tr>
+                `;
+            }, 2000);
+            
+            // Export functionality
+            document.getElementById('exportLogsBtn').addEventListener('click', function() {
+                alert('Export functionality would generate CSV/PDF reports');
+            });
+        });
+    </script>
+</body>
+</html>

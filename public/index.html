@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evid-DGC - Blockchain-Based Legal Evidence Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="hero">
+        <div class="container">
+            <h1>🔗 Evid-DGC</h1>
+            <p>Secure, Transparent, Immutable Legal Evidence on Blockchain</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="grid grid-cols-1" style="max-width: 600px; margin: 0 auto;">
+            <!-- Wallet Connection -->
+            <div class="card" id="walletSection">
+                <div class="card-header">
+                    <h2 class="card-title">Connect Your Wallet</h2>
+                    <p class="card-subtitle">Connect MetaMask to access the Evidence Management System</p>
+                </div>
+                <div class="text-center">
+                    <button id="connectWallet" class="btn btn-primary btn-lg">
+                        🦊 Connect MetaMask
+                    </button>
+                    <div id="walletStatus" class="mt-4 hidden">
+                        <div class="alert alert-success">
+                            <strong>Connected:</strong> <span id="walletAddress"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="card hidden" id="registrationSection">
+                <div class="card-header">
+                    <h2 class="card-title">Register Account</h2>
+                    <p class="card-subtitle">Choose your role and complete registration</p>
+                </div>
+                
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label class="form-label" for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="userRole">Role *</label>
+                        <select id="userRole" class="form-select" required>
+                            <option value="">Select Role</option>
+                            <option value="1">Public Viewer</option>
+                            <option value="2">Investigator</option>
+                            <option value="3">Forensic Analyst</option>
+                            <option value="4">Legal Professional</option>
+                            <option value="5">Court Official</option>
+                            <option value="6">Evidence Manager</option>
+                            <option value="7">Auditor</option>
+                        </select>
+                    </div>
+
+                    <div id="professionalFields" class="hidden">
+                        <div class="form-group">
+                            <label class="form-label" for="badgeNumber">Badge Number *</label>
+                            <input type="text" id="badgeNumber" class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="department">Department *</label>
+                            <input type="text" id="department" class="form-input" placeholder="e.g., Police Department, FBI, Court">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="jurisdiction">Jurisdiction *</label>
+                            <input type="text" id="jurisdiction" class="form-input" placeholder="e.g., City, State, Federal">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary w-full">
+                            Register Account
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Role Descriptions -->
+                <div class="mt-6">
+                    <h3>Role Descriptions:</h3>
+                    <div class="grid gap-4 mt-4">
+                        <div class="p-4 bg-light rounded">
+                            <strong class="badge badge-public">Public Viewer</strong>
+                            <p class="mt-2 text-sm">View publicly released cases and evidence, add comments. No credentials required.</p>
+                        </div>
+                        <div class="p-4 bg-light rounded">
+                            <strong class="badge badge-investigator">Investigator</strong>
+                            <p class="mt-2 text-sm">Create cases, upload evidence, manage investigations. Requires badge and department.</p>
+                        </div>
+                        <div class="p-4 bg-light rounded">
+                            <strong class="badge badge-forensic">Forensic Analyst</strong>
+                            <p class="mt-2 text-sm">Upload forensic analysis, verify evidence, add technical notes. Requires credentials.</p>
+                        </div>
+                        <div class="p-4 bg-light rounded">
+                            <strong class="badge badge-legal">Legal Professional</strong>
+                            <p class="mt-2 text-sm">View authorized cases, request evidence access. Requires bar number and jurisdiction.</p>
+                        </div>
+                        <div class="p-4 bg-light rounded">
+                            <strong class="badge badge-court">Court Official</strong>
+                            <p class="mt-2 text-sm">Approve access requests, release evidence to public, manage case status.</p>
+                        </div>
+                        <div class="p-4 bg-light rounded">
+                            <strong class="badge badge-manager">Evidence Manager</strong>
+                            <p class="mt-2 text-sm">Full evidence access, manage permissions, authorize personnel to cases.</p>
+                        </div>
+                        <div class="p-4 bg-light rounded">
+                            <strong class="badge badge-auditor">Auditor</strong>
+                            <p class="mt-2 text-sm">Read-only access to all data, view audit trails, monitor system activities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Already Registered -->
+            <div class="card hidden" id="alreadyRegisteredSection">
+                <div class="card-header">
+                    <h2 class="card-title">Welcome Back!</h2>
+                    <p class="card-subtitle">You are already registered in the system</p>
+                </div>
+                <div class="text-center">
+                    <div id="userInfo" class="mb-4">
+                        <p><strong>Name:</strong> <span id="userName"></span></p>
+                        <p><strong>Role:</strong> <span id="userRoleName" class="badge"></span></p>
+                        <p><strong>Department:</strong> <span id="userDepartment"></span></p>
+                    </div>
+                    <button id="goToDashboard" class="btn btn-primary btn-lg">
+                        Go to Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content text-center">
+            <div class="loading mb-4"></div>
+            <h3>Processing Transaction...</h3>
+            <p>Please wait while your transaction is being processed on the blockchain.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

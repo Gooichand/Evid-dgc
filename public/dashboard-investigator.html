@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investigator Dashboard - Evidence Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">🔗 Evidence System</a>
+                <div class="flex items-center gap-4">
+                    <span class="badge badge-investigator">Investigator</span>
+                    <span id="userWallet" class="text-sm text-muted"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="mb-6">
+            <h1>Investigator Dashboard</h1>
+            <p class="text-muted">Manage cases, upload evidence, and coordinate investigations</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-4 mb-8">
+            <div class="card stats-card" style="background: var(--investigator);">
+                <div class="stats-number" id="myCasesCount">0</div>
+                <div class="stats-label">My Cases</div>
+            </div>
+            <div class="card stats-card" style="background: var(--investigator);">
+                <div class="stats-number" id="myEvidenceCount">0</div>
+                <div class="stats-label">My Evidence</div>
+            </div>
+            <div class="card stats-card" style="background: var(--investigator);">
+                <div class="stats-number" id="totalCasesCount">0</div>
+                <div class="stats-label">Total Cases</div>
+            </div>
+            <div class="card stats-card" style="background: var(--investigator);">
+                <div class="stats-number" id="publicCasesCount">0</div>
+                <div class="stats-label">Public Cases</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <ul class="tab-list">
+                <li><button class="tab-button active" data-tab="create-case">Create Case</button></li>
+                <li><button class="tab-button" data-tab="upload-evidence">Upload Evidence</button></li>
+                <li><button class="tab-button" data-tab="my-cases">My Cases</button></li>
+                <li><button class="tab-button" data-tab="my-evidence">My Evidence</button></li>
+                <li><button class="tab-button" data-tab="browse-public">Browse Public</button></li>
+                <li><button class="tab-button" data-tab="verify">Verify</button></li>
+            </ul>
+        </div>
+
+        <!-- Create Case Tab -->
+        <div id="create-case" class="tab-content active">
+            <div class="card">
+                <h2>Create New Case</h2>
+                <form id="createCaseForm">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label class="form-label" for="caseNumber">Case Number *</label>
+                            <input type="text" id="caseNumber" class="form-input" required placeholder="e.g., CASE-2024-001">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="caseVisibility">Visibility *</label>
+                            <select id="caseVisibility" class="form-select" required>
+                                <option value="1">Restricted</option>
+                                <option value="2">Confidential</option>
+                                <option value="0">Public</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="caseTitle">Case Title *</label>
+                        <input type="text" id="caseTitle" class="form-input" required placeholder="Brief descriptive title">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="caseDescription">Description *</label>
+                        <textarea id="caseDescription" class="form-textarea" required placeholder="Detailed case description..."></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label class="form-label" for="incidentDate">Incident Date *</label>
+                            <input type="date" id="incidentDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="caseLocation">Location *</label>
+                            <input type="text" id="caseLocation" class="form-input" required placeholder="Incident location">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label class="form-label" for="suspects">Suspects (one per line)</label>
+                            <textarea id="suspects" class="form-textarea" placeholder="John Doe, Age 25&#10;Jane Smith, Age 30"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="victims">Victims (one per line)</label>
+                            <textarea id="victims" class="form-textarea" placeholder="Victim Name, Age&#10;Business Name"></textarea>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Create Case</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Upload Evidence Tab -->
+        <div id="upload-evidence" class="tab-content">
+            <div class="card">
+                <h2>Upload Evidence</h2>
+                <form id="uploadEvidenceForm">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label class="form-label" for="evidenceId">Evidence ID *</label>
+                            <input type="text" id="evidenceId" class="form-input" required placeholder="e.g., EVD-2024-001">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="evidenceCaseNumber">Case Number *</label>
+                            <select id="evidenceCaseNumber" class="form-select" required>
+                                <option value="">Select Case</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label class="form-label" for="itemNumber">Item Number *</label>
+                            <input type="text" id="itemNumber" class="form-input" required placeholder="e.g., ITEM-001">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="evidenceCategory">Category *</label>
+                            <select id="evidenceCategory" class="form-select" required>
+                                <option value="">Select Category</option>
+                                <option value="Physical">Physical Evidence</option>
+                                <option value="Digital">Digital Evidence</option>
+                                <option value="Document">Document</option>
+                                <option value="Photo">Photograph</option>
+                                <option value="Video">Video</option>
+                                <option value="Audio">Audio</option>
+                                <option value="Biological">Biological</option>
+                                <option value="Fingerprint">Fingerprint</option>
+                                <option value="DNA">DNA</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="evidenceDescription">Description *</label>
+                        <textarea id="evidenceDescription" class="form-textarea" required placeholder="Detailed description of the evidence..."></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="form-group">
+                            <label class="form-label" for="collectionDate">Collection Date *</label>
+                            <input type="date" id="collectionDate" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="collectionLocation">Collection Location *</label>
+                            <input type="text" id="collectionLocation" class="form-input" required placeholder="Where evidence was collected">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="collectedBy">Collected By *</label>
+                            <input type="text" id="collectedBy" class="form-input" required placeholder="Officer/Agent name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="evidenceFile">Evidence File *</label>
+                        <input type="file" id="evidenceFile" class="form-input" required>
+                        <div class="text-sm text-muted mt-2">Maximum file size: 50MB. Supported formats: All file types</div>
+                    </div>
+                    
+                    <div id="uploadProgress" class="hidden">
+                        <div class="mb-2">Uploading to IPFS...</div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="progressBar" class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Upload Evidence</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- My Cases Tab -->
+        <div id="my-cases" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>My Cases</h2>
+                <button id="refreshMyCases" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div id="myCasesContainer">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading your cases...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Evidence Tab -->
+        <div id="my-evidence" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>My Evidence</h2>
+                <button id="refreshMyEvidence" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div id="myEvidenceContainer">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading your evidence...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Browse Public Tab -->
+        <div id="browse-public" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>Public Evidence</h2>
+                <button id="refreshPublicEvidence" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div id="publicEvidenceContainer">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading public evidence...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verify Tab -->
+        <div id="verify" class="tab-content">
+            <div class="card">
+                <h2>Verify Evidence</h2>
+                <div class="form-group">
+                    <label class="form-label" for="verifyEvidenceId">Evidence ID</label>
+                    <input type="text" id="verifyEvidenceId" class="form-input" placeholder="Enter Evidence ID to verify">
+                </div>
+                <button id="verifyEvidenceBtn" class="btn btn-primary">Verify Evidence</button>
+                <div id="verificationResult" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Details Modal -->
+    <div id="caseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalCaseTitle">Case Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalCaseContent"></div>
+            <div class="mt-4">
+                <h3>Manage Access</h3>
+                <div class="form-group">
+                    <input type="text" id="grantAccessAddress" class="form-input" placeholder="Enter wallet address to grant access">
+                </div>
+                <button id="grantCaseAccess" class="btn btn-success">Grant Access</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evidence Details Modal -->
+    <div id="evidenceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalEvidenceTitle">Evidence Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalEvidenceContent"></div>
+            <div class="mt-4">
+                <h3>Manage Access</h3>
+                <div class="form-group">
+                    <input type="text" id="grantEvidenceAccessAddress" class="form-input" placeholder="Enter wallet address to grant access">
+                </div>
+                <button id="grantEvidenceAccess" class="btn btn-success">Grant Access</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content text-center">
+            <div class="loading mb-4"></div>
+            <h3>Processing...</h3>
+            <p id="loadingMessage">Please wait while your transaction is being processed.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="config.js"></script>
+    <script src="dashboard-investigator.js"></script>
+</body>
+</html>

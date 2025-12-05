@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Viewer Dashboard - Evidence Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">🔗 Evidence System</a>
+                <div class="flex items-center gap-4">
+                    <span class="badge badge-public">Public Viewer</span>
+                    <span id="userWallet" class="text-sm text-muted"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <h1>Public Evidence Portal</h1>
+            <p>Access publicly released legal cases and evidence with full transparency</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-3 mb-8">
+            <div class="card stats-card">
+                <div class="stats-number" id="publicCasesCount">0</div>
+                <div class="stats-label">Public Cases</div>
+            </div>
+            <div class="card stats-card">
+                <div class="stats-number" id="publicEvidenceCount">0</div>
+                <div class="stats-label">Public Evidence</div>
+            </div>
+            <div class="card stats-card">
+                <div class="stats-number" id="totalCommentsCount">0</div>
+                <div class="stats-label">Total Comments</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <ul class="tab-list">
+                <li><button class="tab-button active" data-tab="cases">Released Cases</button></li>
+                <li><button class="tab-button" data-tab="evidence">Released Evidence</button></li>
+                <li><button class="tab-button" data-tab="search">Search</button></li>
+                <li><button class="tab-button" data-tab="about">About</button></li>
+            </ul>
+        </div>
+
+        <!-- Cases Tab -->
+        <div id="cases" class="tab-content active">
+            <div class="flex justify-between items-center mb-6">
+                <h2>Publicly Released Cases</h2>
+                <div class="flex gap-4">
+                    <input type="text" id="caseFilter" class="form-input" placeholder="Filter cases..." style="width: 300px;">
+                    <button id="refreshCases" class="btn btn-outline">🔄 Refresh</button>
+                </div>
+            </div>
+            <div id="casesContainer" class="grid gap-4">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading public cases...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Evidence Tab -->
+        <div id="evidence" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>Publicly Released Evidence</h2>
+                <div class="flex gap-4">
+                    <select id="evidenceCategory" class="form-select" style="width: 200px;">
+                        <option value="">All Categories</option>
+                        <option value="Physical">Physical</option>
+                        <option value="Digital">Digital</option>
+                        <option value="Document">Document</option>
+                        <option value="Photo">Photo</option>
+                        <option value="Video">Video</option>
+                        <option value="Audio">Audio</option>
+                    </select>
+                    <input type="text" id="evidenceFilter" class="form-input" placeholder="Filter evidence..." style="width: 300px;">
+                    <button id="refreshEvidence" class="btn btn-outline">🔄 Refresh</button>
+                </div>
+            </div>
+            <div id="evidenceContainer" class="grid gap-4">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading public evidence...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Tab -->
+        <div id="search" class="tab-content">
+            <div class="card">
+                <h2>Search by ID</h2>
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <h3>Search Case</h3>
+                        <div class="form-group">
+                            <input type="text" id="searchCaseId" class="form-input" placeholder="Enter Case Number">
+                        </div>
+                        <button id="searchCaseBtn" class="btn btn-primary">Search Case</button>
+                    </div>
+                    <div>
+                        <h3>Search Evidence</h3>
+                        <div class="form-group">
+                            <input type="text" id="searchEvidenceId" class="form-input" placeholder="Enter Evidence ID">
+                        </div>
+                        <button id="searchEvidenceBtn" class="btn btn-primary">Search Evidence</button>
+                    </div>
+                </div>
+                <div id="searchResults" class="mt-6"></div>
+            </div>
+        </div>
+
+        <!-- About Tab -->
+        <div id="about" class="tab-content">
+            <div class="card">
+                <h2>About Public Access</h2>
+                <div class="grid gap-6">
+                    <div>
+                        <h3>🔓 What You Can Access</h3>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>Cases that have been officially released to the public</li>
+                            <li>Evidence items that court officials have made publicly available</li>
+                            <li>Download public evidence files from IPFS</li>
+                            <li>Add comments and engage in public discussion</li>
+                            <li>Search for specific cases or evidence by ID</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>🔒 Privacy & Security</h3>
+                        <ul class="list-disc pl-6 space-y-2">
+                            <li>Only officially released items are visible to public viewers</li>
+                            <li>All evidence is stored securely on IPFS with blockchain verification</li>
+                            <li>Chain of custody is maintained and verifiable</li>
+                            <li>Your comments are permanently recorded on the blockchain</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>⚖️ Legal Notice</h3>
+                        <p class="text-sm text-muted">
+                            This system provides access to legal evidence that has been officially released to the public. 
+                            All information is provided for transparency and public interest. Users should respect the 
+                            legal nature of this content and use it responsibly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Details Modal -->
+    <div id="caseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalCaseTitle">Case Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalCaseContent">
+                <!-- Case details will be loaded here -->
+            </div>
+            <div class="comments-section">
+                <h3>Public Comments</h3>
+                <div id="caseComments"></div>
+                <div class="form-group mt-4">
+                    <textarea id="newCaseComment" class="form-textarea" placeholder="Add a public comment..."></textarea>
+                </div>
+                <button id="addCaseComment" class="btn btn-primary">Add Comment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evidence Details Modal -->
+    <div id="evidenceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalEvidenceTitle">Evidence Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalEvidenceContent">
+                <!-- Evidence details will be loaded here -->
+            </div>
+            <div class="comments-section">
+                <h3>Public Comments</h3>
+                <div id="evidenceComments"></div>
+                <div class="form-group mt-4">
+                    <textarea id="newEvidenceComment" class="form-textarea" placeholder="Add a public comment..."></textarea>
+                </div>
+                <button id="addEvidenceComment" class="btn btn-primary">Add Comment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="config.js"></script>
+    <script src="dashboard-public-viewer.js"></script>
+</body>
+</html>

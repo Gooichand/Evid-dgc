@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Professional Dashboard - Evidence Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">🔗 Evidence System</a>
+                <div class="flex items-center gap-4">
+                    <span class="badge badge-legal">Legal Professional</span>
+                    <span id="userWallet" class="text-sm text-muted"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="mb-6">
+            <h1>Legal Professional Dashboard</h1>
+            <p class="text-muted">Access authorized cases, request evidence access, and review legal materials</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-4 mb-8">
+            <div class="card stats-card" style="background: var(--legal);">
+                <div class="stats-number" id="authorizedCasesCount">0</div>
+                <div class="stats-label">Authorized Cases</div>
+            </div>
+            <div class="card stats-card" style="background: var(--legal);">
+                <div class="stats-number" id="accessRequestsCount">0</div>
+                <div class="stats-label">Access Requests</div>
+            </div>
+            <div class="card stats-card" style="background: var(--legal);">
+                <div class="stats-number" id="availableEvidenceCount">0</div>
+                <div class="stats-label">Available Evidence</div>
+            </div>
+            <div class="card stats-card" style="background: var(--legal);">
+                <div class="stats-number" id="publicEvidenceCount">0</div>
+                <div class="stats-label">Public Evidence</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <ul class="tab-list">
+                <li><button class="tab-button active" data-tab="my-cases">My Cases</button></li>
+                <li><button class="tab-button" data-tab="request-access">Request Access</button></li>
+                <li><button class="tab-button" data-tab="browse-public">Browse Public</button></li>
+                <li><button class="tab-button" data-tab="verify">Verify Evidence</button></li>
+            </ul>
+        </div>
+
+        <!-- My Cases Tab -->
+        <div id="my-cases" class="tab-content active">
+            <div class="flex justify-between items-center mb-6">
+                <h2>Authorized Cases</h2>
+                <button id="refreshMyCases" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div id="myCasesContainer">
+                <div class="text-center p-8">
+                    <p>Cases you have been authorized to access will appear here.</p>
+                    <p class="text-muted">Contact the case investigator or evidence manager for access.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Access Tab -->
+        <div id="request-access" class="tab-content">
+            <div class="grid grid-cols-2 gap-6">
+                <div class="card">
+                    <h3>Request Evidence Access</h3>
+                    <form id="requestAccessForm">
+                        <div class="form-group">
+                            <label class="form-label" for="requestEvidenceId">Evidence ID *</label>
+                            <input type="text" id="requestEvidenceId" class="form-input" required placeholder="Enter Evidence ID">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="accessJustification">Justification *</label>
+                            <textarea id="accessJustification" class="form-textarea" required placeholder="Explain why you need access to this evidence..." rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h3>My Access Requests</h3>
+                    <div id="myRequestsContainer">
+                        <div class="text-center p-4">
+                            <div class="loading mb-4"></div>
+                            <p>Loading your requests...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Browse Public Tab -->
+        <div id="browse-public" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>Public Evidence</h2>
+                <button id="refreshPublicEvidence" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div id="publicEvidenceContainer">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading public evidence...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verify Evidence Tab -->
+        <div id="verify" class="tab-content">
+            <div class="card">
+                <h2>Verify Evidence</h2>
+                <div class="form-group">
+                    <label class="form-label" for="verifyEvidenceId">Evidence ID</label>
+                    <input type="text" id="verifyEvidenceId" class="form-input" placeholder="Enter Evidence ID to verify">
+                </div>
+                <button id="verifyEvidenceBtn" class="btn btn-primary">Verify Evidence</button>
+                <div id="verificationResult" class="mt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="config.js"></script>
+    <script>
+        // Simplified Legal Professional Dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Basic initialization
+            if (typeof window.ethereum !== 'undefined') {
+                window.ethereum.request({ method: 'eth_accounts' }).then(accounts => {
+                    if (accounts.length > 0) {
+                        document.getElementById('userWallet').textContent = accounts[0].substring(0, 6) + '...' + accounts[0].substring(38);
+                    }
+                });
+            }
+            
+            // Tab switching
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById(this.dataset.tab).classList.add('active');
+                });
+            });
+            
+            // Placeholder functionality
+            document.getElementById('requestAccessForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Access request functionality would be implemented here');
+            });
+        });
+    </script>
+</body>
+</html>

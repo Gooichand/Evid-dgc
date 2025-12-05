@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forensic Analyst Dashboard - Evidence Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="nav-brand">🔗 Evidence System</a>
+                <div class="flex items-center gap-4">
+                    <span class="badge badge-forensic">Forensic Analyst</span>
+                    <span id="userWallet" class="text-sm text-muted"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="mb-6">
+            <h1>Forensic Analyst Dashboard</h1>
+            <p class="text-muted">Analyze evidence, add forensic notes, and verify evidence integrity</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-4 mb-8">
+            <div class="card stats-card" style="background: var(--forensic);">
+                <div class="stats-number" id="assignedCasesCount">0</div>
+                <div class="stats-label">Assigned Cases</div>
+            </div>
+            <div class="card stats-card" style="background: var(--forensic);">
+                <div class="stats-number" id="analyzedEvidenceCount">0</div>
+                <div class="stats-label">Analyzed Evidence</div>
+            </div>
+            <div class="card stats-card" style="background: var(--forensic);">
+                <div class="stats-number" id="pendingAnalysisCount">0</div>
+                <div class="stats-label">Pending Analysis</div>
+            </div>
+            <div class="card stats-card" style="background: var(--forensic);">
+                <div class="stats-number" id="verifiedEvidenceCount">0</div>
+                <div class="stats-label">Verified Evidence</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <ul class="tab-list">
+                <li><button class="tab-button active" data-tab="upload-analysis">Upload Analysis</button></li>
+                <li><button class="tab-button" data-tab="my-analysis">My Analysis</button></li>
+                <li><button class="tab-button" data-tab="assigned-cases">Assigned Cases</button></li>
+                <li><button class="tab-button" data-tab="verify">Verify Evidence</button></li>
+            </ul>
+        </div>
+
+        <!-- Upload Analysis Tab -->
+        <div id="upload-analysis" class="tab-content active">
+            <div class="card">
+                <h2>Upload Forensic Analysis</h2>
+                <form id="uploadAnalysisForm">
+                    <div class="form-group">
+                        <label class="form-label" for="analysisEvidenceId">Evidence ID *</label>
+                        <input type="text" id="analysisEvidenceId" class="form-input" required placeholder="Enter Evidence ID">
+                        <button type="button" id="loadEvidenceBtn" class="btn btn-outline btn-sm mt-2">Load Evidence Details</button>
+                    </div>
+
+                    <div id="evidenceDetails" class="hidden">
+                        <div class="alert alert-info">
+                            <h4>Evidence Information</h4>
+                            <div id="evidenceInfo"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="forensicNotes">Forensic Analysis Notes *</label>
+                        <textarea id="forensicNotes" class="form-textarea" required placeholder="Enter detailed forensic analysis, findings, methodology, conclusions..." rows="10"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="analysisStatus">Evidence Status After Analysis *</label>
+                        <select id="analysisStatus" class="form-select" required>
+                            <option value="">Select Status</option>
+                            <option value="1">Verified</option>
+                            <option value="3">Accepted</option>
+                            <option value="2">Challenged</option>
+                            <option value="4">Rejected</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="analysisFile">Analysis Report File (Optional)</label>
+                        <input type="file" id="analysisFile" class="form-input" accept=".pdf,.doc,.docx,.txt">
+                        <div class="text-sm text-muted mt-2">Upload detailed forensic report (PDF, DOC, DOCX, TXT)</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Submit Analysis</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- My Analysis Tab -->
+        <div id="my-analysis" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>My Forensic Analysis</h2>
+                <button id="refreshMyAnalysis" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div id="myAnalysisContainer">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading your analysis...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assigned Cases Tab -->
+        <div id="assigned-cases" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2>Assigned Cases</h2>
+                <button id="refreshAssignedCases" class="btn btn-outline">🔄 Refresh</button>
+            </div>
+            <div id="assignedCasesContainer">
+                <div class="text-center p-8">
+                    <div class="loading mb-4"></div>
+                    <p>Loading assigned cases...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verify Evidence Tab -->
+        <div id="verify" class="tab-content">
+            <div class="card">
+                <h2>Verify Evidence Integrity</h2>
+                <div class="form-group">
+                    <label class="form-label" for="verifyEvidenceId">Evidence ID</label>
+                    <input type="text" id="verifyEvidenceId" class="form-input" placeholder="Enter Evidence ID to verify">
+                </div>
+                <button id="verifyEvidenceBtn" class="btn btn-primary">Verify Evidence</button>
+                <div id="verificationResult" class="mt-4"></div>
+                
+                <div class="mt-6">
+                    <h3>Bulk Verification</h3>
+                    <div class="form-group">
+                        <label class="form-label" for="bulkEvidenceIds">Evidence IDs (one per line)</label>
+                        <textarea id="bulkEvidenceIds" class="form-textarea" placeholder="EVD-2024-001&#10;EVD-2024-002&#10;EVD-2024-003"></textarea>
+                    </div>
+                    <button id="bulkVerifyBtn" class="btn btn-secondary">Bulk Verify</button>
+                    <div id="bulkVerificationResult" class="mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Evidence Details Modal -->
+    <div id="evidenceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalEvidenceTitle">Evidence Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalEvidenceContent"></div>
+            <div class="mt-4">
+                <h3>Quick Analysis</h3>
+                <div class="form-group">
+                    <textarea id="quickAnalysisNotes" class="form-textarea" placeholder="Add quick forensic notes..."></textarea>
+                </div>
+                <button id="addQuickAnalysis" class="btn btn-success">Add Analysis</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analysis Details Modal -->
+    <div id="analysisModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalAnalysisTitle">Analysis Details</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div id="modalAnalysisContent"></div>
+        </div>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content text-center">
+            <div class="loading mb-4"></div>
+            <h3>Processing...</h3>
+            <p id="loadingMessage">Please wait while your transaction is being processed.</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+    <script src="config.js"></script>
+    <script src="dashboard-forensic.js"></script>
+</body>
+</html>
