@@ -8,10 +8,10 @@ const roleNames = {
 };
 
 const roleDashboards = {
-    1: 'dashboard-public-viewer.html', 2: 'dashboard-public-viewer.html',
-    3: 'dashboard-public-viewer.html', 4: 'dashboard-public-viewer.html',
-    5: 'dashboard-public-viewer.html', 6: 'dashboard-public-viewer.html',
-    7: 'dashboard-public-viewer.html', 8: 'dashboard-public-viewer.html'
+    1: 'dashboard.html', 2: 'dashboard.html',
+    3: 'dashboard.html', 4: 'dashboard.html',
+    5: 'dashboard.html', 6: 'dashboard.html',
+    7: 'dashboard.html', 8: 'dashboard.html'
 };
 
 document.addEventListener('DOMContentLoaded', function() {
